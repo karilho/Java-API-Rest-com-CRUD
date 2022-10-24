@@ -1,0 +1,53 @@
+package com.example.crud.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.crud.entities.Pessoa;
+import com.example.crud.repositories.PessoaRepository;
+
+@Service
+public class PessoaService {
+
+	@Autowired
+	private PessoaRepository pessoaRepo;
+
+	public Pessoa salvarPessoa(Pessoa objP) {
+		Pessoa novaPessoa = pessoaRepo.save(objP);
+		return novaPessoa;
+	}
+
+	public List<Pessoa> buscarTodos() {
+		return pessoaRepo.findAll();
+	}
+
+	public Optional<Pessoa> buscarUm(Long id) {
+		Optional<Pessoa> pessoaEncontrada = pessoaRepo.findById(id);
+		return pessoaEncontrada;
+	}
+
+	public Pessoa atualizarPessoa(Long id, Pessoa novosDados) {
+			try {
+			Pessoa pessoaParaAtualizar = pessoaRepo.getOne(id);
+			updateBanco(pessoaParaAtualizar, novosDados);
+			
+			return pessoaRepo.save(pessoaParaAtualizar);
+			
+		} catch (EntityNotFoundException e ) {
+			throw new EntityNotFoundException(e.getMessage());
+		}
+	}		
+
+	private void updateBanco(Pessoa pessoaParaAtualizar, Pessoa objP) {
+		pessoaParaAtualizar.setNome(objP.getNome());
+		pessoaParaAtualizar.setEmail(objP.getEmail());
+		pessoaParaAtualizar.setIdade(objP.getIdade());
+
+	}
+
+}

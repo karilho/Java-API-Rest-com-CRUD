@@ -1,0 +1,58 @@
+package com.example.crud.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.crud.entities.Pessoa;
+import com.example.crud.services.PessoaService;
+
+@RestController
+@RequestMapping(value = "/pessoas", produces = "application/json")
+public class PessoaController {
+
+	@Autowired
+	private PessoaService pessoaService;
+
+	@PostMapping
+	public ResponseEntity<Pessoa> salvar(@RequestBody Pessoa objP) {
+
+		objP = pessoaService.salvarPessoa(objP);
+
+		return ResponseEntity.ok().body(objP);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<Pessoa>> buscarTodos() {
+		List<Pessoa> todoMundo = pessoaService.buscarTodos();
+		return ResponseEntity.ok().body(todoMundo);
+	}
+
+	@GetMapping(value = "/buscarUmaPessoa/{id}")
+	public ResponseEntity<Optional<Pessoa>> buscarUmaPessoa(@PathVariable Long id) {
+		Optional<Pessoa> objP = pessoaService.buscarUm(id);
+		return ResponseEntity.ok().body(objP);
+	}
+
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa objP) {
+		objP = pessoaService.atualizarPessoa(id, objP);
+		return ResponseEntity.ok().body(objP);
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
+		pessoaService.deletarPessoa(id);
+		return ResponseEntity.noContent().build();
+	}
+}
