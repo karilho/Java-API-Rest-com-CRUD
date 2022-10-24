@@ -14,3 +14,5 @@ Foi utilizado o banco de dados Postgres, rodando com docker. O arquivo compose e
 3 - Traduzir o projeto todo para inglês.
 
 4 - Estudar DTO para aprimorar o projeto.
+
+5 - Colocar para rodar utilizando o InteliJ
